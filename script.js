@@ -12,15 +12,22 @@ document.getElementById('searchBtn').addEventListener('click', function() {
             }
         })
         .then(data => {
-            document.getElementById('pokemonName').textContent = data.name.toUpperCase();
-            document.getElementById('pokemonImage').src = data.sprites.front_default;
-            document.getElementById('pokemonHeight').textContent = data.height;
-            document.getElementById('pokemonWeight').textContent = data.weight;
+            // Crear un nuevo contenedor para el Pokémon encontrado
+            const pokemonCard = document.createElement('div');
+            pokemonCard.classList.add('pokemon-card');
+            
+            // Insertar el contenido del Pokémon
+            pokemonCard.innerHTML = `
+                <h2>${data.name.toUpperCase()}</h2>
+                <img src="${data.sprites.front_default}" alt="${data.name}">
+                <p><strong>Altura:</strong> ${data.height}</p>
+                <p><strong>Peso:</strong> ${data.weight}</p>
+                <p><strong>Tipo:</strong> ${data.types.map(typeInfo => typeInfo.type.name).join(', ')}</p>
+            `;
 
-            const types = data.types.map(typeInfo => typeInfo.type.name).join(', ');
-            document.getElementById('pokemonType').textContent = types;
-
-            document.getElementById('pokemonData').classList.remove('hidden');
+            // Insertar la tarjeta del Pokémon al principio del contenedor de resultados
+            const pokemonResults = document.getElementById('pokemonResults');
+            pokemonResults.insertBefore(pokemonCard, pokemonResults.firstChild);
         })
         .catch(error => console.log(error));
 });
